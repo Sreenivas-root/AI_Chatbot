@@ -1,0 +1,6 @@
+chatbot/
+docs/
+secret.py
+model/
+__pycache__/
+db/
