@@ -1,8 +1,10 @@
 import streamlit as st
 import chatbot_gateway as gateway
+from streamlit.runtime import get_instance
+from streamlit.runtime.scriptrunner import get_script_run_ctx
 
 st.title("AI HYCO1 employee")
-
+session_id = get_script_run_ctx().session_id
 # Initialize chat history
 if "messages" not in st.session_state:
     st.session_state.messages = []
@@ -23,7 +25,7 @@ if prompt := st.chat_input("What is up?"):
     # response = f"Echo: {prompt}"
     # Display assistant response in chat message container
     with st.chat_message("assistant"):
-        response = gateway.run_inference(prompt)
+        response = gateway.run_inference(prompt, session_id)
         st.markdown(response)
         # stream = client.chat.completions.create(
         #     model=st.session_state["openai_model"],
