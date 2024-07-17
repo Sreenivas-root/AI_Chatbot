@@ -19,12 +19,18 @@ def run_inference(query, session_id):
         history_messages_key="chat_history",
         output_messages_key="answer",
     )
-    return full_chain.invoke(
+    c = 0
+    for chunk in full_chain.stream(
         {"input": query},
         config={
             "configurable": {"session_id": session_id}
         },  # constructs a key "abc123" in `store`.
-    )["answer"]
+    ):
+        print('Chunk %d' % c)
+        c+=1
+        print(chunk)
+        if 'answer' in chunk:
+            yield str(chunk['answer'])
 
 store = {}
 def get_session_history(session_id: str) -> BaseChatMessageHistory:
